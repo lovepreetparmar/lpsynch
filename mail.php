@@ -5,8 +5,8 @@
         
         // Get the form fields and remove whitespace.
         $name = strip_tags(trim($_POST["name"]));
-        $subject = strip_tags(trim($_POST["subject"]));
-        $number = strip_tags(trim($_POST["number"]));
+        $subject = strip_tags(trim($_POST["subject"] ?? ''));
+        $number = strip_tags(trim($_POST["number"] ?? ''));
         $name = str_replace(array("\r","\n"),array(" "," "),$name);
         $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
         $message = trim($_POST["message"]);
@@ -24,12 +24,12 @@
         $recipient = "info@lpsynch.com";
 
         // Set the email subject.
-        $subject = "New Message from $name";
+        $email_subject = $subject !== '' ? $subject : "New Message from $name";
 
         // Build the email content.
         $email_content = "Name: $name\n";
         $email_content .= "Email: $email\n\n";
-        $email_content .= "Subject: $subject\n\n";
+        $email_content .= "Subject: $email_subject\n\n";
         $email_content .= "Number: $number\n\n";
         $email_content .= "Message:\n$message\n";
 
@@ -37,7 +37,7 @@
         $email_headers = "From: $name <$email>";
 
         // Send the email.
-        if (mail($recipient, $subject, $email_content, $email_headers)) {
+        if (mail($recipient, $email_subject, $email_content, $email_headers)) {
             // Set a 200 (okay) response code.
             http_response_code(200);
             echo "Thanks! Message has been sent successfully.";

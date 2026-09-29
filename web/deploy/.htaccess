@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Leave PHP contact endpoint alone
+  RewriteRule ^mail\.php$ - [L]
+
+  # Serve existing files and directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # SPA fallback
+  RewriteRule ^ index.html [L]
+</IfModule>

@@ -1,0 +1,100 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --color-surface: #0a0a0a;
+  --color-surface-elevated: #111111;
+  --color-surface-muted: #161616;
+  --color-border: #2a2a2a;
+  --color-border-subtle: #1c1c1c;
+
+  --color-ink: #fafafa;
+  --color-ink-muted: #a3a3a3;
+  --color-ink-subtle: #737373;
+
+  --color-accent: #f1ac2f;
+  --color-accent-dim: #d9961f;
+  --color-accent-glow: rgb(241 172 47 / 0.12);
+
+  --color-paper: #fafafa;
+  --color-paper-ink: #0a0a0a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent-glow);
+  color: var(--color-ink);
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.cursor-spotlight {
+  background: radial-gradient(
+    600px circle at var(--spot-x, 50%) var(--spot-y, 30%),
+    rgb(241 172 47 / 0.06),
+    transparent 55%
+  );
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+[data-theme='light'] {
+  --color-surface: #fafafa;
+  --color-surface-elevated: #ffffff;
+  --color-surface-muted: #f4f4f5;
+  --color-border: #e4e4e7;
+  --color-border-subtle: #f0f0f2;
+  --color-ink: #0a0a0a;
+  --color-ink-muted: #52525b;
+  --color-ink-subtle: #71717a;
+}

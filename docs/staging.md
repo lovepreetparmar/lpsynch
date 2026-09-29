@@ -14,7 +14,7 @@
    ```
 2. From repo root, run:
    ```bash
-   cd web && npm run build && cd .. && rm -rf hostinger-deploy && mkdir hostinger-deploy && cp -R web/dist/* hostinger-deploy/ && cp mail.php hostinger-deploy/
+   cd web && npm run build && cd .. && rm -rf hostinger-deploy && mkdir hostinger-deploy && cp -R web/dist/* hostinger-deploy/ && cp web/dist/.htaccess hostinger-deploy/ && cp mail.php hostinger-deploy/
    ```
    Or use `web/scripts/package-hostinger.sh` after fixing line endings if needed.
 3. Upload **everything inside** `hostinger-deploy/` to staging `public_html` (includes `index.html`, `assets/`, `.htaccess`, `mail.php`).

@@ -1,10 +1,11 @@
-export type SiteState = 'home' | 'about' | 'approach' | 'services' | 'people' | 'contact'
+export type SiteState = 'home' | 'about' | 'approach' | 'services' | 'work' | 'people' | 'contact'
 
 export const siteStateOrder: SiteState[] = [
   'home',
   'about',
   'approach',
   'services',
+  'work',
   'people',
   'contact',
 ]

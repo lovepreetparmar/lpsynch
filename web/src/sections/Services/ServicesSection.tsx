@@ -1,103 +1,154 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { servicesContent } from '@/data/services'
-import { Section } from '@/components/Section/Section'
-import { Reveal } from '@/components/Reveal/Reveal'
-import { ServiceGlyph } from '@/components/ServiceGlyph/ServiceGlyph'
-import { useSite } from '@/systems/site/SiteContext'
+import { Container } from '@/components/Container/Container'
+import { ServiceSpecimenPanel } from '@/components/services/ServiceSpecimen'
+import { MotionReveal } from '@/components/motion/Reveal'
 
 export function ServicesSection({ hideHeader = false }: { hideHeader?: boolean }) {
-  const [active, setActive] = useState<string | null>(null)
-  const { setActiveServiceId } = useSite()
+  const [lockedIndex, setLockedIndex] = useState(0)
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null)
+  const prevIndexRef = useRef(0)
 
-  const setService = (slug: string | null) => {
-    setActive(slug)
-    setActiveServiceId(slug)
+  const activeIndex = previewIndex ?? lockedIndex
+  const active = servicesContent.items[activeIndex]
+  const total = servicesContent.items.length
+  const prevIndexForTransition = prevIndexRef.current
+
+  useEffect(() => {
+    prevIndexRef.current = activeIndex
+  }, [activeIndex])
+
+  const handleSelect = (index: number) => {
+    setLockedIndex(index)
+    setPreviewIndex(null)
   }
 
-  const activeService = servicesContent.items.find((s) => s.slug === active)
-
   return (
-    <Section id="services" flowSection="services" variant="muted">
-      {!hideHeader ? (
-        <Reveal>
-          <p className="font-mono text-xs tracking-[0.25em] text-ink-subtle uppercase">
-            {servicesContent.sectionLabel}
-          </p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight capitalize md:text-4xl">
-            {servicesContent.heading}
-          </h2>
-        </Reveal>
-      ) : null}
-      <div className="relative mt-16 divide-y divide-border border-y border-border">
-        {activeService && (
-          <div
-            className="pointer-events-none fixed z-30 hidden max-w-xs border border-border bg-surface/95 p-4 backdrop-blur-md md:block"
-            style={{
-              left: 'max(1rem, var(--preview-x, 50%))',
-              top: 'max(6rem, var(--preview-y, 40%))',
-            }}
-            aria-hidden
-          >
-            <ServiceGlyph slug={activeService.slug} active />
-            <p className="mt-3 text-sm text-ink-muted">{activeService.description}</p>
-          </div>
-        )}
-        {servicesContent.items.map((service, index) => (
-          <Reveal key={service.slug} delay={index * 0.04}>
-            <article
-              data-cursor-view
-              className="group grid gap-4 py-10 transition-colors md:grid-cols-12 md:gap-8 md:py-14"
-              onMouseEnter={(e) => {
-                setService(service.slug)
-                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-                document.documentElement.style.setProperty('--preview-x', `${rect.right + 16}px`)
-                document.documentElement.style.setProperty('--preview-y', `${rect.top}px`)
-              }}
-              onMouseLeave={() => setService(null)}
-              onFocus={() => setService(service.slug)}
-              onBlur={() => setService(null)}
+    <section id="services" data-flow-section="services" className="relative border-b border-border-subtle bg-surface-muted">
+      <Container className="py-16 pb-20 md:py-24 md:pb-28">
+        {!hideHeader ? (
+          <MotionReveal className="mb-12 max-w-2xl">
+            <p className="font-mono text-xs tracking-[0.3em] text-ink-subtle uppercase">Services</p>
+            <h2 className="mt-4 text-4xl font-semibold uppercase tracking-tight md:text-5xl">
+              {servicesContent.heading}
+            </h2>
+          </MotionReveal>
+        ) : null}
+
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10 lg:items-stretch">
+          <div className="lg:col-span-6 lg:min-h-0">
+            <ul
+              className="divide-y divide-border border-y border-border"
+              role="listbox"
+              aria-label="Services"
+              onMouseLeave={() => setPreviewIndex(null)}
             >
-              <div className="flex items-start gap-4 md:col-span-2">
-                <span className="font-mono text-2xl text-accent md:text-3xl">{service.number}</span>
-                <ServiceGlyph slug={service.slug} active={active === service.slug} />
-              </div>
-              <div className="md:col-span-4">
-                <h3
-                  className={`text-2xl font-semibold uppercase leading-tight tracking-tight transition-transform md:text-3xl ${
-                    active === service.slug ? 'translate-x-1 text-accent' : ''
-                  }`}
-                >
-                  {service.title.split(' ').map((word) => (
-                    <span key={word} className="block">{word}</span>
-                  ))}
-                </h3>
-                <span className="mt-2 hidden font-mono text-xs text-ink-subtle md:inline">↗</span>
-              </div>
-              <div className="md:col-span-6">
-                <p
-                  className={`max-w-lg leading-relaxed transition-all ${
-                    active === service.slug ? 'text-ink' : 'text-ink-muted'
-                  }`}
-                >
-                  {service.description}
-                </p>
-                <span
-                  className={`mt-4 block h-px bg-accent transition-all ${
-                    active === service.slug ? 'w-24' : 'w-12 opacity-40'
-                  }`}
-                  aria-hidden
+              {servicesContent.items.map((service, index) => {
+                const isActive = index === activeIndex
+                const isLocked = index === lockedIndex && previewIndex === null
+                return (
+                  <li key={service.slug}>
+                    <button
+                      type="button"
+                      data-cursor-view
+                      role="option"
+                      aria-selected={isActive}
+                      className={`group w-full py-8 text-left transition-colors md:py-10 ${
+                        isActive ? 'text-ink' : 'text-ink-muted hover:text-ink'
+                      }`}
+                      onMouseEnter={() => setPreviewIndex(index)}
+                      onFocus={() => setPreviewIndex(index)}
+                      onClick={() => handleSelect(index)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'ArrowDown') {
+                          e.preventDefault()
+                          handleSelect(Math.min(total - 1, index + 1))
+                        }
+                        if (e.key === 'ArrowUp') {
+                          e.preventDefault()
+                          handleSelect(Math.max(0, index - 1))
+                        }
+                      }}
+                    >
+                      <span
+                        className={`font-mono text-sm transition-colors md:text-base ${
+                          isActive ? 'text-accent' : 'text-ink-subtle'
+                        }`}
+                      >
+                        {service.number}
+                      </span>
+                      <h3
+                        className={`mt-3 text-2xl font-semibold uppercase leading-tight tracking-tight transition-transform md:text-4xl ${
+                          isActive ? 'translate-x-1' : ''
+                        }`}
+                      >
+                        {service.title}
+                      </h3>
+                      {isLocked ? (
+                        <span className="mt-2 block font-mono text-[9px] tracking-widest text-accent uppercase">
+                          Active
+                        </span>
+                      ) : null}
+                      <span
+                        className={`mt-4 block h-px bg-accent transition-all ${
+                          isActive ? 'w-full max-w-md opacity-100' : 'w-12 opacity-30'
+                        }`}
+                        aria-hidden
+                      />
+                      <p className="mt-4 max-w-lg text-base leading-relaxed md:text-lg">{service.description}</p>
+                      <ul className="mt-4 flex flex-wrap gap-2 lg:hidden">
+                        {service.technologies.map((tech) => (
+                          <li
+                            key={tech}
+                            className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] text-ink-subtle uppercase"
+                          >
+                            {tech}
+                          </li>
+                        ))}
+                      </ul>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+
+          <div className="relative hidden min-h-0 lg:col-span-6 lg:block">
+            <div className="sticky top-24 z-[1] lg:max-h-[calc(100svh-5.5rem)]">
+              {active ? (
+                <ServiceSpecimenPanel
+                  service={active}
+                  index={activeIndex}
+                  total={total}
+                  prevIndex={prevIndexForTransition}
+                  className="lg:max-h-[calc(100svh-5.5rem)]"
                 />
-              </div>
-            </article>
-          </Reveal>
-        ))}
-      </div>
-      {!hideHeader ? (
-        <Link to="/services" className="mt-10 inline-block text-sm font-medium text-accent hover:underline">
-          All services
-        </Link>
-      ) : null}
-    </Section>
+              ) : null}
+            </div>
+          </div>
+        </div>
+
+        {active ? (
+          <div className="mt-10 lg:hidden">
+            <ServiceSpecimenPanel
+              service={active}
+              index={activeIndex}
+              total={total}
+              prevIndex={prevIndexForTransition}
+            />
+          </div>
+        ) : null}
+
+        {!hideHeader ? (
+          <Link
+            to="/services"
+            className="relative z-[2] mt-12 inline-block pb-6 text-sm font-medium text-accent hover:underline lg:mt-8"
+          >
+            All services
+          </Link>
+        ) : null}
+      </Container>
+    </section>
   )
 }

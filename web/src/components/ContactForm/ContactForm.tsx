@@ -50,7 +50,7 @@ export function ContactForm() {
   })
 
   const inputClass =
-    'w-full rounded-sm border border-border bg-surface-elevated px-4 py-3 text-ink placeholder:text-ink-subtle focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30'
+    'w-full border-0 border-b border-border bg-transparent px-0 py-3 text-ink placeholder:text-ink-subtle transition-colors focus-visible:border-accent focus-visible:outline-none focus-visible:ring-0'
 
   return (
     <form onSubmit={onSubmit} className="space-y-5" noValidate>
@@ -78,11 +78,11 @@ export function ContactForm() {
       </div>
       <div>
         <label htmlFor="message" className="mb-2 block text-sm font-medium text-ink-muted">Message</label>
-        <textarea id="message" rows={5} className={inputClass} {...register('message')} />
+        <textarea id="message" rows={5} className={`${inputClass} resize-y min-h-[120px]`} {...register('message')} />
         {errors.message ? <p className="mt-1 text-sm text-red-400" role="alert">{errors.message.message}</p> : null}
       </div>
-      <Button type="submit" disabled={status === 'loading'}>
-        {status === 'loading' ? 'Sending…' : 'Send message'}
+      <Button type="submit" disabled={status === 'loading'} className="mt-2 w-full sm:w-auto">
+        {status === 'loading' ? 'Sending…' : status === 'success' ? 'Message sent ✓' : 'Send message →'}
       </Button>
       {statusMessage ? (
         <p

@@ -1,8 +1,7 @@
 import { Seo } from '@/components/Seo/Seo'
-import { PageHeader } from '@/components/PageHeader/PageHeader'
 import { Container } from '@/components/Container/Container'
+import { EditorialPageHero } from '@/components/layout/EditorialPageHero'
 import { ServicesSection } from '@/sections/Services/ServicesSection'
-import { servicesContent } from '@/data/services'
 
 export function ServicesPage() {
   return (
@@ -13,7 +12,11 @@ export function ServicesPage() {
         path="/services"
       />
       <Container>
-        <PageHeader title={servicesContent.heading} />
+        <EditorialPageHero
+          label="Services"
+          title="We design and build digital products."
+          supporting="Six verified service lines from LPSynch — web, applications, software, marketing, brand, and hosting."
+        />
       </Container>
       <ServicesSection hideHeader />
     </>

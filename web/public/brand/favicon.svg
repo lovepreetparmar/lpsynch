@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#0a0a0a"/>
+  <g transform="translate(5 4) scale(0.5)">
+    <path fill="#f1ac2f" d="M5.5 36.5 5.5 32.5 19 5.5 26.5 8.5 13 39.5Z"/>
+    <path fill="#fafafa" d="M3 3h10v28h16v9H3V3Z"/>
+    <path fill="#fafafa" d="M26 3h9v41h-9V22.5c0-5.5 4.5-9.5 10.5-9.5H38v8h-3.5c-2.8 0-4.5 1.8-4.5 4.5V44H26V3Z"/>
+    <path fill="#fafafa" fill-opacity=".85" d="M35 3h2.5l4 5.5-2 1.2-4.5-6.7H35V3Z"/>
+  </g>
+</svg>

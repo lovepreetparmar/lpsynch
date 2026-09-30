@@ -4,6 +4,8 @@ export type ServiceItem = {
   slug: string
   title: string
   description: string
+  /** Related tooling / capability tags — not client claims */
+  technologies: readonly string[]
 }
 
 export const servicesContent = {
@@ -16,6 +18,7 @@ export const servicesContent = {
       title: 'Digital Marketing',
       description:
         'Cultivate brand success with our tailored, high-impact digital marketing services and strategies for your unique business growth.',
+      technologies: ['Content', 'Analytics', 'SEO', 'Social'],
     },
     {
       number: '02',
@@ -23,6 +26,7 @@ export const servicesContent = {
       title: 'Website Development',
       description:
         'Crafting responsive, dynamic websites that elevate your online presence and drive business growth through our seamless development services.',
+      technologies: ['React', 'TypeScript', 'PHP', 'APIs'],
     },
     {
       number: '03',
@@ -30,6 +34,7 @@ export const servicesContent = {
       title: 'Application Development',
       description:
         'Transforming ideas into powerful, user-centric applications with our development services and seamless functionality for success.',
+      technologies: ['Mobile', 'React', 'APIs', 'UX'],
     },
     {
       number: '04',
@@ -37,6 +42,7 @@ export const servicesContent = {
       title: 'Custom Software Development',
       description:
         'Tailored software solutions to streamline operations, enhance efficiency, and drive business growth through our development services.',
+      technologies: ['.NET', 'PHP', 'Integrations', 'Databases'],
     },
     {
       number: '05',
@@ -44,6 +50,7 @@ export const servicesContent = {
       title: 'Brand Identity',
       description:
         "Designing captivating logos, websites, and posters that elevate your brand's visual identity through our creative design services.",
+      technologies: ['Visual design', 'UI', 'Brand systems', 'Web'],
     },
     {
       number: '06',
@@ -51,6 +58,7 @@ export const servicesContent = {
       title: 'Domain and Hosting Management',
       description:
         'Efficiently manage domains and hosting for seamless online presence, ensuring reliability through our management services.',
+      technologies: ['DNS', 'Hosting', 'SSL', 'Monitoring'],
     },
   ] satisfies ServiceItem[],
 } as const

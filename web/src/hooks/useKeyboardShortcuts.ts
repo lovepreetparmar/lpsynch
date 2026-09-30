@@ -15,7 +15,7 @@ export function useKeyboardShortcuts() {
       }
       if (e.key === '?') {
         window.alert(
-          'Shortcuts: 1–6 home sections (on homepage), T theme, L Digital Flow easter egg, Cmd/Ctrl+K command palette',
+          'Shortcuts: 1–6 home sections (on homepage), L Digital Flow easter egg, Cmd/Ctrl+K command palette',
         )
       }
       const map: Record<string, string> = {
